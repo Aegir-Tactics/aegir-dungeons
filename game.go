@@ -392,15 +392,15 @@ func (g *Game) AttackEnemy(ctx context.Context, msg Message) error {
 	}
 	g.currentEnemy.Damage(address, float64(power))
 
-	m := fmt.Sprintf("%s Dealt %v damage! %s ⚔ %s, %v HP Remaining!\n", msg.DiscordUser.Mention(), power, strings.Join(emojis, " "), g.currentEnemy.Name, g.currentEnemy.Health)
+	m := fmt.Sprintf("%s Dealt %v damage! %s ⚔ %s, %v HP\n", msg.DiscordUser.Mention(), power, strings.Join(emojis, " "), g.currentEnemy.Name, g.currentEnemy.Health)
 	if g.currentEnemy.Health <= 0 {
 		g.currentEnemy.Damage(address, float64(power))
-		m = fmt.Sprintf("%s 🎉🎉🎉 %s Dealt the final hit! X2 DAMAGE!! 🎉🎉🎉\n", msg.DiscordUser.Mention(), strings.Join(emojis, " "))
+		m = fmt.Sprintf("%s 🎉%s Final hit X2 DAMAGE!\n", msg.DiscordUser.Mention(), strings.Join(emojis, " "))
 	}
 	if g.currentEnemy.isFirstHit {
 		g.currentEnemy.isFirstHit = false
 		g.currentEnemy.Damage(address, float64(power))
-		m = fmt.Sprintf("%s 🎉🎉🎉 %s Dealt the FIRST hit! X2 DAMAGE!! 🎉🎉🎉\n", msg.DiscordUser.Mention(), strings.Join(emojis, " "))
+		m = fmt.Sprintf("%s 🎉%s FIRST hit X2 DAMAGE!\n", msg.DiscordUser.Mention(), strings.Join(emojis, " "))
 	}
 	if _, err := g.messageBuilder.WriteString(m); err != nil {
 		g.logger.Error("attack_enemy:", err)
@@ -427,7 +427,7 @@ func (g *Game) AttackEnemy(ctx context.Context, msg Message) error {
 		if _, err := g.am.SendLoot(ctx, g.dungeonGoldTokenID, rewardLedger); err != nil {
 			return err
 		}
-		m := "☠ Enemy Killed ☠ \n"
+		m := "Enemy Killed\n"
 		m += fmt.Sprintf("%s: %vdAGR\n", DAGRemoji, rewardAmount)
 		if len(bonusLedger) > 0 {
 			if _, err := g.am.SendLoot(ctx, g.BonusTokenID, bonusLedger); err != nil {
