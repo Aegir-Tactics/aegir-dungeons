@@ -263,7 +263,7 @@ func (am *AccountManager) InitializeOptInCache(ctx context.Context, asaID uint64
 	nextToken := ""
 
 	for {
-		resp, err := am.ai.LookupAssetBalances(asaID).CurrencyGreaterThan(0).NextToken(nextToken).Do(ctx)
+		resp, err := am.ai.LookupAssetBalances(asaID).CurrencyGreaterThan(0).Limit(1000).NextToken(nextToken).Do(ctx)
 		if err != nil {
 			return err
 		}
@@ -290,7 +290,7 @@ func (am *AccountManager) InitializeLegendsCache(ctx context.Context) error {
 		nextToken := ""
 
 		for {
-			resp, err := am.ai.LookupAssetBalances(asaID).CurrencyGreaterThan(0).NextToken(nextToken).Do(ctx)
+			resp, err := am.ai.LookupAssetBalances(asaID).CurrencyGreaterThan(0).Limit(1000).NextToken(nextToken).Do(ctx)
 			if err != nil {
 				return err
 			}
@@ -536,7 +536,7 @@ func (am *AccountManager) ValidAsaAccounts(ctx context.Context, asaID uint64) ([
 	var res []string
 	var nextToken string
 	for {
-		resp, err := am.ai.LookupAssetBalances(asaID).NextToken(nextToken).Do(ctx)
+		resp, err := am.ai.LookupAssetBalances(asaID).Limit(1000).NextToken(nextToken).Do(ctx)
 		if err != nil {
 			return nil, err
 		}
