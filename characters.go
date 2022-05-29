@@ -48,6 +48,13 @@ var MainnetAsaToClass = map[uint64]uint64{
 	544736887: Sage,
 	562258870: Raider,
 	573509824: Corsair,
+	587208857: Outlaw,
+	596914358: Guardian,
+	601824851: Blademaster,
+
+	// Algomonz
+	757517034: Archon,
+	757521685: Raider,
 
 	// AOWL MINIS
 	577370701: Mini,
@@ -77,10 +84,6 @@ var MainnetAsaToClass = map[uint64]uint64{
 	607985431: Mini,
 	607985566: Mini,
 	607985660: Mini,
-
-	587208857: Outlaw,
-	596914358: Guardian,
-	601824851: Blademaster,
 
 	// Raven MINIS
 	653332430: Mini,
@@ -202,6 +205,9 @@ var MainnetAsaToEmoji = map[uint64]string{
 	562258870: "<:nazir:934891652089270314>",
 	557904219: "<:arcadianvaleria:935205763654246402>",
 	573509824: "<:rashad:938098042412879893>",
+	757517034: "<:algomonz_nadia:980464036296687666>",
+	757521685: "<:algomonz_nazir:980463480794673193>",
+
 	577370701: "<:miniaowl:940384267190546442>",
 	577381222: "<:miniaowl:940384267190546442>",
 	577381383: "<:miniaowl:940384267190546442>",
