@@ -28,6 +28,7 @@ var (
 	ErrInvalidAddress          = errors.New("accounts: invalid address")
 	ErrAssetNotFound           = errors.New("accounts: asset not found")
 	ErrMultipleRegisteredUsers = errors.New("accounts: multiple users found with same address")
+	ErrDiscordUserIDNotFound   = errors.New("accounts: discord user id not found")
 )
 
 // Account ...
@@ -431,6 +432,42 @@ func (am *AccountManager) Legends(ctx context.Context, address string) ([]uint64
 	am.legendCache[address] = legends
 
 	return legends, nil
+}
+
+// LegendHolderDiscordIDs ...
+func (am *AccountManager) LegendHolderDiscordIDs(ctx context.Context) ([]string, error) {
+	res := make([]string, 0, len(am.legendCache))
+	for address := range am.legendCache {
+		userID, err := am.GetDiscordUserID(ctx, address)
+		if err != nil {
+			if err == ErrDiscordUserIDNotFound {
+				continue
+			}
+			return nil, err
+		}
+		res = append(res, userID)
+	}
+
+	return res, nil
+}
+
+// GetDiscordUserID ...
+func (am *AccountManager) GetDiscordUserID(ctx context.Context, address string) (string, error) {
+	userID, ok := am.accountToUserID[address]
+	if ok {
+		return userID, nil
+	}
+
+	userID, err := am.accountStore.Get(ctx, fmt.Sprintf("WAL-", address))
+	if err != nil {
+		return "", err
+	}
+	if userID == "" {
+		return "", ErrDiscordUserIDNotFound
+	}
+	am.accountToUserID[address] = userID
+
+	return userID, nil
 }
 
 // TimeSinceLastAttack ...

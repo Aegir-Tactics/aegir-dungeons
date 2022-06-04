@@ -37,9 +37,11 @@ const (
 	GuildID                  = "883754257612943371"
 	AdminRoleID              = "903319921679818782"
 	DungeoneerRoleID         = "911491170981527602"
+	MythicHolderRoleID       = "982018103149998101"
 	GeneralChatMention       = "<#903284194921295893>"
 	AdminRoleMention         = "<@&" + AdminRoleID + ">"
 	DungeoneerRoleMention    = "<@&" + DungeoneerRoleID + ">"
+	MythicHolderRoleMention  = "<@&" + MythicHolderRoleID + ">"
 	DecimalAdjustment        = 1000000
 	DefaultRoundCooldown     = 10 * time.Second
 	DefaultPower             = 10
@@ -241,7 +243,28 @@ func (g *Game) InitializeAndWait(ctx context.Context, d time.Duration) error {
 	if err := g.am.InitializeCaches(ctx); err != nil {
 		return err
 	}
+	if err := g.AssignMythicHolderRoles(ctx); err != nil {
+		return err
+	}
 	time.Sleep(d)
+
+	return nil
+}
+
+// AssignMythicHolderRoles ...
+func (g *Game) AssignMythicHolderRoles(ctx context.Context) error {
+	// Get all legend holder addresses
+	userIDs, err := g.am.LegendHolderDiscordIDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, userID := range userIDs {
+		// Apply MythicHolderRoleID
+		if err := g.discordSession.GuildMemberRoleAdd(GuildID, userID, MythicHolderRoleID); err != nil {
+			g.logger.Errorf("assign_mythic_holder_role: user_id:%q %v\n", userID, err)
+		}
+	}
 
 	return nil
 }
@@ -338,7 +361,8 @@ func (g *Game) HandleDungeonMsg(ctx context.Context, msg Message) error {
 		return nil
 	}
 
-	if err := g.am.ValidateAccount(ctx, msg.DiscordUser.ID); err != nil {
+	err := g.am.ValidateAccount(ctx, msg.DiscordUser.ID)
+	if err != nil {
 		return g.HandleAccountErr(msg, err)
 	}
 
