@@ -15,6 +15,7 @@ import (
 	"github.com/algorand/go-algorand-sdk/mnemonic"
 	"github.com/algorand/go-algorand-sdk/transaction"
 	"github.com/algorand/go-algorand-sdk/types"
+	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -435,7 +436,7 @@ func (am *AccountManager) Legends(ctx context.Context, address string) ([]uint64
 }
 
 // LegendHolderDiscordIDs ...
-func (am *AccountManager) LegendHolderDiscordIDs(ctx context.Context) ([]string, error) {
+func (am *AccountManager) LegendHolderDiscordIDs(ctx context.Context, logger *logrus.Logger) []string {
 	res := make([]string, 0, len(am.legendCache))
 	for address := range am.legendCache {
 		userID, err := am.GetDiscordUserID(ctx, address)
@@ -443,12 +444,12 @@ func (am *AccountManager) LegendHolderDiscordIDs(ctx context.Context) ([]string,
 			if err == ErrDiscordUserIDNotFound {
 				continue
 			}
-			return nil, err
+			logger.Errorf("legend_holders_discord_ids: %s\n", err)
 		}
 		res = append(res, userID)
 	}
 
-	return res, nil
+	return res
 }
 
 // GetDiscordUserID ...

@@ -254,12 +254,7 @@ func (g *Game) InitializeAndWait(ctx context.Context, d time.Duration) error {
 // AssignMythicHolderRoles ...
 func (g *Game) AssignMythicHolderRoles(ctx context.Context) error {
 	// Get all legend holder addresses
-	userIDs, err := g.am.LegendHolderDiscordIDs(ctx)
-	if err != nil {
-		return err
-	}
-
-	for _, userID := range userIDs {
+	for _, userID := range g.am.LegendHolderDiscordIDs(ctx, g.logger) {
 		// Apply MythicHolderRoleID
 		if err := g.discordSession.GuildMemberRoleAdd(GuildID, userID, MythicHolderRoleID); err != nil {
 			g.logger.Errorf("assign_mythic_holder_role: user_id:%q %v\n", userID, err)
