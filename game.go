@@ -152,6 +152,9 @@ func NewGame(logger *logrus.Logger, cfg GameConfig) (*Game, error) {
 
 // Play ...
 func (g *Game) Play(ctx context.Context) {
+	ticker := time.NewTicker(time.Hour)
+	defer ticker.Stop()
+
 	for {
 		select {
 		case <-g.startRoundChan:
@@ -160,8 +163,9 @@ func (g *Game) Play(ctx context.Context) {
 			if err := g.HandleDungeonMsg(ctx, msg); err != nil {
 				g.logger.Error(err)
 			}
+		case <-ticker.C:
+			go g.AssignMythicHolderRoles(ctx)
 		case <-ctx.Done():
-			g.Close()
 			return
 		}
 	}
@@ -243,16 +247,13 @@ func (g *Game) InitializeAndWait(ctx context.Context, d time.Duration) error {
 	if err := g.am.InitializeCaches(ctx); err != nil {
 		return err
 	}
-	if err := g.AssignMythicHolderRoles(ctx); err != nil {
-		return err
-	}
 	time.Sleep(d)
 
 	return nil
 }
 
 // AssignMythicHolderRoles ...
-func (g *Game) AssignMythicHolderRoles(ctx context.Context) error {
+func (g *Game) AssignMythicHolderRoles(ctx context.Context) {
 	// Get all legend holder addresses
 	for _, userID := range g.am.LegendHolderDiscordIDs(ctx, g.logger) {
 		// Apply MythicHolderRoleID
@@ -260,8 +261,6 @@ func (g *Game) AssignMythicHolderRoles(ctx context.Context) error {
 			g.logger.Errorf("assign_mythic_holder_role: user_id:%q %v\n", userID, err)
 		}
 	}
-
-	return nil
 }
 
 // StartRound ...

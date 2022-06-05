@@ -32,6 +32,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("error creating game:", err)
 	}
+	defer game.Close()
 
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	defer cancelFunc()
