@@ -479,7 +479,7 @@ func (g *Game) HandleAccountErr(msg Message, inErr error) error {
 	case ErrUserNotRegistered:
 		m += "Ensure your account is registered. Use `!register <58 length address>`"
 	case ErrNoLegends:
-		m += "Ensure your account holds a Legend. https://www.nftexplorer.app/sellers?creator=TDRZOHTX4LFSYX3LUXL5WME47UUOUSAYHK4DL23B6R4OLAYJTYBJAGGNJI"
+		m += "Ensure your account holds a Legend or Mini-Legend.\n https://www.nftexplorer.app/sellers/aegir-legends (10 HP)\n https://www.nftexplorer.app/sellers/aegir-mini-legends (1-10 HP)"
 	case ErrNotOptedIn:
 		m += fmt.Sprintf("Ensure your account has opted into ASA#%v; Press the Accept ASA button https://www.randgallery.com/algo-collection/?address=%v", g.dungeonGoldTokenID, g.dungeonGoldTokenID)
 	default:
