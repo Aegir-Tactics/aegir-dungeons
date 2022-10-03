@@ -71,13 +71,13 @@ type AccountManager struct {
 func NewAccountManager(cfg GameConfig, asaID uint64) (*AccountManager, error) {
 	asaToClass := TestnetAsaToClass
 	asaToEmoji := TestnetAsaToEmoji
-	address := NewAlgoExplorerTestnet
-	indexerAddress := NewAlgoExplorerIndexerTestnet
+	address := AlgoNodeTestnet
+	indexerAddress := AlgoNodeIndexerTestnet
 	if cfg.MainnetEnabled {
 		asaToClass = MainnetAsaToClass
 		asaToEmoji = MainnetAsaToEmoji
-		address = NewAlgoExplorerMainnet
-		indexerAddress = NewAlgoExplorerIndexerMainnet
+		address = AlgoNodeMainnet
+		indexerAddress = AlgoNodeIndexerMainnet
 	}
 	ac, err := algod.MakeClient(address, "")
 	if err != nil {

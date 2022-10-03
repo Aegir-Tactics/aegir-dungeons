@@ -13,6 +13,12 @@ import (
 )
 
 const (
+	AlgoNodeTestnet = "https://testnet-api.algonode.cloud"
+	AlgoNodeMainnet = "https://mainnet-api.algonode.cloud"
+
+	AlgoNodeIndexerTestnet = "https://testnet-idx.algonode.cloud"
+	AlgoNodeIndexerMainnet = "https://mainnet-idx.algonode.cloud"
+
 	AlgoExplorerTestnet = "https://testnet.algoexplorerapi.io"
 	AlgoExplorerMainnet = "https://algoexplorerapi.io"
 
